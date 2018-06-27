@@ -1,9 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { PaginationOptionsDto, PaginationResponseDto, ResponseDto, RemoteDto } from '@lxdhub/common';
-
-import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
 import { NGXLogger } from 'ngx-logger';
 
 /**
@@ -23,11 +19,10 @@ export class RemoteService {
   /**
    * Fetches all remotes
    */
-  findAll()
-    : Observable<ResponseDto<RemoteDto[]>> {
+  findAll() {
     this.logger.debug(`Request all remotes`);
     // Fetch the remotes
     return this.http
-      .get<ResponseDto<RemoteDto[]>>(`${environment.apiUrl}/api/v1/remote`);
+      .get(`${window['process.env'].API_URL}/remote`);
   }
 }

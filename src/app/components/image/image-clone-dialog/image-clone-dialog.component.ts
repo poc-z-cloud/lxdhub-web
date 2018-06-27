@@ -101,7 +101,7 @@ export class ImageCloneDialogComponent implements OnInit, OnDestroy {
         })
       .subscribe(
         // Subscribe to clone operation
-        result => {
+        (result: any) => {
           this.waitForCloneOperation(result.results.uuid);
         },
         error => {

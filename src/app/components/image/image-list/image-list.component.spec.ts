@@ -2,22 +2,21 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
 import { async } from '@angular/core/testing';
-import { ImageListItemDto, ImageListOptions, PaginationResponseDto, RemoteDto } from '@lxdhub/common';
 import { Observable } from 'rxjs/Observable';
 
 import { ImageService } from '../image.service';
 import { ImageListComponent } from './image-list.component';
 
-const images: ImageListItemDto[] = [{
+const images = [{
   fingerprint: '1',
   description: '1',
   id: 1,
   uploadedAt: new Date()
-} as ImageListItemDto];
+}];
 
 class MockImageService {
-  findByRemote(options: ImageListOptions): Observable<PaginationResponseDto<ImageListItemDto[]>> {
-    const imageResponse: PaginationResponseDto<ImageListItemDto[]> = {
+  findByRemote(options: any) {
+    const imageResponse = {
       results: images,
       offset: options.offset,
       limit: options.limit,
@@ -47,7 +46,7 @@ describe('ImageListComponent', () => {
 
   it('should get the correct page', () => {
     component.loadPage();
-    const imageResponse: PaginationResponseDto<ImageListItemDto[]> = {
+    const imageResponse = {
       results: images,
       offset: 0,
       limit: 25,
@@ -61,7 +60,7 @@ describe('ImageListComponent', () => {
     expect(component.invalidSearchQuery).toEqual(false);
 
     component.loadPage();
-    const imageResponse: PaginationResponseDto<ImageListItemDto[]> = {
+    const imageResponse = {
       results: images,
       offset: 0,
       limit: 25,
@@ -75,7 +74,7 @@ describe('ImageListComponent', () => {
     expect(component.error).toBeUndefined();
 
     component.loadPage();
-    const imageResponse: PaginationResponseDto<ImageListItemDto[]> = {
+    const imageResponse = {
       results: images,
       offset: 0,
       limit: 25,
@@ -111,7 +110,7 @@ describe('ImageListComponent', () => {
     expect(component.query).toBe('os=ubuntu');
     component.offset = 1;
 
-    const remoteDto: RemoteDto = {
+    const remoteDto = {
       id: 1,
       name: 'images',
       protocol: 'lxd',

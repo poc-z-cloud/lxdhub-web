@@ -39,7 +39,7 @@ npm run start
 ## Build for Production
 
 Run the following command, to build the project.
-The build artifacts will be stored in the `dist/` directory.
+The build artifacts will be stored in the `lib/` directory.
 
 ```bash
 API_URL=<PROD_API_URL> LOGGING_URL=<PROD_API_URL>/api/v1/log npm run build
@@ -60,7 +60,7 @@ docker build -t lxdhub-web:dev . && docker run -p 4200:80 lxdhub-web:dev
 0. Configure nginx (optional)
 
 You can configure the nginx configuration, which is used to serve the
-built `dist/` folder. Readme more about [nginx](http://nginx.org/en/docs/beginners_guide.html).
+built `lib/` folder. Readme more about [nginx](http://nginx.org/en/docs/beginners_guide.html).
 
 Edit the configuration by running in your shell `vi nginx-custom.conf`
 

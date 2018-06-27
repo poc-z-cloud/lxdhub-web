@@ -16,5 +16,12 @@
 </head>
 <body>
   <app-root></app-root>
+  <script>
+    window['process.env'] = {
+      API_URL: '{{ env.API_URL }}',
+      LOGGING_URL: '{{ env.LOGGING_URL }}',
+      NODE_ENV: '{{ env.NODE_ENV }}',
+    };
+  </script>
 </body>
 </html>

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatSelectChange, MatSnackBar } from '@angular/material';
-import { RemoteDto } from '@lxdhub/common';
 
 import { RemoteService } from '../remote.service';
 
@@ -20,15 +19,15 @@ import { RemoteService } from '../remote.service';
  */
 export class RemoteSelectComponent implements OnInit {
 
-  remotes: RemoteDto[];
-  selectedRemote: RemoteDto;
+  remotes: any[];
+  selectedRemote: any;
   /**
    * The selected remote-event. Changes when the selected
    * remote changes.
    * @example
    * <app-remote-select (selected)="onRemoteChange($event)"></app-remote-select>
    */
-  @Output() selected = new EventEmitter<RemoteDto>();
+  @Output() selected = new EventEmitter<any>();
 
   constructor(
     private remoteService: RemoteService,
@@ -61,7 +60,7 @@ export class RemoteSelectComponent implements OnInit {
     this.remoteService
       .findAll()
       .subscribe(
-        remoteResponse => {
+        (remoteResponse: any) => {
           this.remotes = remoteResponse.results;
           // Show first remote
           this.selectedRemote = this.remotes[0];

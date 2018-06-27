@@ -1,16 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import {
-  CloneImageDto,
-  ImageDetailDto,
-  ImageListItemDto,
-  ImageListOptions,
-  PaginationResponseDto,
-  ResponseDto,
-} from '@lxdhub/common';
-import { Observable } from 'rxjs';
-
-import { environment } from '../../../environments/environment';
+import { Inject, Injectable } from '@angular/core';
+import { ImageListItemDto, PaginationResponseDto } from '@lxdhub/common';
 import { NGXLogger } from 'ngx-logger';
 
 /**
@@ -25,14 +15,16 @@ export class ImageService {
    */
   constructor(
     private http: HttpClient,
-    private logger: NGXLogger) { }
+    private logger: NGXLogger,
+    @Inject('LXDHubWebSettings') private appSettings) {
+      console.log(this.appSettings);
+    }
 
   /**
    * Fetches the images with the given pagination options applied
    * @param options The pagination options which will be sent as query parameter
    */
-  findByRemote(options: ImageListOptions)
-    : Observable<PaginationResponseDto<ImageListItemDto[]>> {
+  findByRemote(options) {
     // Set the query parameters
     let params = new HttpParams()
       .set('limit', options.limit.toString())
@@ -47,18 +39,17 @@ export class ImageService {
 
     // Fetch the Images
     return this.http
-      .get<PaginationResponseDto<ImageListItemDto[]>>(`${environment.apiUrl}/api/v1/image`, { params });
+      .get<PaginationResponseDto<ImageListItemDto>>(`${window['process.env'].API_URL}/image`, { params });
   }
 
   /**
    * Fetches one image with the given id
    * @param pagination The id of the image
    */
-  findOne(id: number)
-    : Observable<ResponseDto<ImageDetailDto>> {
+  findOne(id: number) {
     this.logger.debug(`Find one image: imageId#${id}`);
     return this.http
-      .get<ResponseDto<ImageDetailDto>>(`${environment.apiUrl}/api/v1/image/${id}`);
+      .get(`${window['process.env'].API_URL}/image/${id}`);
   }
 
   /**
@@ -66,10 +57,9 @@ export class ImageService {
    * @param id The id of the image
    * @param cloneImageDto The clone image dto
    */
-  cloneImage(id: number, cloneImageDto: CloneImageDto)
-    : Observable<ResponseDto<{ uuid: string }>> {
+  cloneImage(id: number, cloneImageDto) {
     this.logger.debug(`Cloning image: imageId#${id}`, cloneImageDto);
     return this.http
-      .post<ResponseDto<{ uuid: string }>>(`${environment.apiUrl}/api/v1/image/${id}/clone`, cloneImageDto);
+      .post(`${window['process.env'].API_URL}/image/${id}/clone`, cloneImageDto);
   }
 }

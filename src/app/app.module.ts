@@ -1,18 +1,18 @@
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { APP_ID, Inject, NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ImageModule } from './components/image/image.module';
+import { SocketIoModule } from 'ng-socket-io';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ImageListComponent } from './components/image/image-list/image-list.component';
+import { ImageModule } from './components/image/image.module';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { LxdLogoComponent } from './components/shared/lxd-logo/lxd-logo.component';
-import { SocketIoModule } from 'ng-socket-io';
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { environment } from '../environments/environment';
 
+const env = window['process.env'];
 
 @NgModule({
   declarations: [
@@ -21,7 +21,7 @@ import { environment } from '../environments/environment';
     NavigationComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'lxdhub-web' }),
     HttpClientModule,
     NoopAnimationsModule,
     ImageModule,
@@ -30,9 +30,28 @@ import { environment } from '../environments/environment';
     LoggerModule.forRoot({
       level: NgxLoggerLevel.DEBUG,
       serverLogLevel: NgxLoggerLevel.DEBUG,
-      serverLoggingUrl: environment.loggingUrl
+      serverLoggingUrl: window['process.env'].LOGGING_URL
     })
+  ],
+  providers: [
+    {
+      provide: 'LXDHubWebSettings',
+      useFactory: () => ({
+        apiUrl: env.API_URL,
+        loggingUrl: env.LOGGING_URL,
+        port: env.PORT,
+        hostUrl: env.HOST_URL
+      })
+    }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(APP_ID) private appId: string) {
+    const platform = isPlatformBrowser(platformId) ?
+      'in the browser' : 'on the server';
+    console.log(`Running ${platform} with appId=${appId}`);
+  }
+}

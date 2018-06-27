@@ -2,11 +2,11 @@ import 'rxjs/add/observable/of';
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSelectModule, MatSnackBarModule } from '@angular/material';
-import { RemoteDto, ResponseDto } from '@lxdhub/common';
 import { Observable } from 'rxjs/Observable';
 
 import { RemoteService } from '../remote.service';
 import { RemoteSelectComponent } from './remote-select.component';
+import { ResponseDto, RemoteDto } from '@lxdhub/common';
 
 class MockRemoteService {
   findAll(): Observable<ResponseDto<RemoteDto[]>> {

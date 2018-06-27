@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material';
-import { ImageListItemDto, ImageListOptions, PaginationResponseDto, RemoteDto } from '@lxdhub/common';
 
 import { ImageService } from '../image.service';
 import { NGXLogger } from 'ngx-logger';
@@ -66,9 +65,9 @@ export class ImageListComponent {
    */
   constructor(
     private imageService: ImageService) { }
-  imageResponse: PaginationResponseDto<ImageListItemDto[]>;
+  imageResponse: any;
   error: string;
-  remote: RemoteDto;
+  remote: any;
   limit = 25;
   offset = 0;
   query = '';
@@ -80,7 +79,7 @@ export class ImageListComponent {
    * `offset` to 0 and reloads loads the page
    * @param remote The remote, which got changed
    */
-  onRemoteChange(remote: RemoteDto) {
+  onRemoteChange(remote: any) {
     this.remote = remote;
     this.offset = 0;
     this.loadPage();
@@ -127,7 +126,7 @@ export class ImageListComponent {
    * Loads images with the given pagintaion options applied
    * @param pagination The pagination options which will be sent as query parameter to the server
    */
-  private loadImages(pagination: ImageListOptions) {
+  private loadImages(pagination: any) {
     return this.imageService.findByRemote(pagination)
       .subscribe(
         data => {
