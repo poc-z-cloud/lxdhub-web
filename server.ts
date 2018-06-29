@@ -2,90 +2,90 @@
 import 'reflect-metadata';
 import 'zone.js/dist/zone-node';
 
-import { enableProdMode } from '@angular/core';
-import { ILXDHubService } from '@lxdhub/common';
+import { enableProdMode, StaticProvider } from '@angular/core';
+import { Interfaces, LogType, WinstonLogger } from '@lxdhub/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
+import * as Chalk from 'chalk';
 import * as express from 'express';
-import * as nunjucks from 'nunjucks';
 import { join } from 'path';
 
-import { LXDHubWebSettings } from './src/lxdhubwebsettings.interface';
+import { LXDHUB_WEB_SETTINGS, LXDHubWebSettings } from './src/lxdhubwebsettings.interface';
 
-export class LXDHubWeb implements ILXDHubService {
-  private app;
-  private distFolder: string = join(process.cwd(), 'lib');
-  private browserDistFolder: string = join(this.distFolder, 'browser');
-  constructor(private settings: LXDHubWebSettings) { }
-
-  private setupNunjucks() {
-    nunjucks.configure(this.browserDistFolder, {
-      autoescape: true,
-      express: this.app,
-    });
-  }
-
-  private setupNgRendering() {
-    const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./lib/server/main');
-
-    this.app.engine('html', ngExpressEngine({
-      bootstrap: AppServerModuleNgFactory,
-      providers: [
-        provideModuleMap(LAZY_MODULE_MAP),
-        {
-          useValue: this.settings,
-          provide: 'LXDHubWebSettings'
-        }
-      ]
-    }));
-  }
-
-  private async bootstrap() {
-    this.app = express();
-
-    this.setupNunjucks();
-    this.setupNgRendering();
-
-    this.app.set('view engine', 'html');
-    this.app.set('views', this.browserDistFolder);
-
-    // Server static files from /browser
-    this.app.get('*.*', express.static(this.browserDistFolder));
-
-    const env = process.env;
-    // All regular routes use the Universal engine
-    this.app.get('*', (req, res) => {
-      res.render('index', {
-        req,
-        env: {
-          API_URL: env.API_URL || 'http://localhost:3000/api/v1',
-          LOGGING_URL: env.LOGGING_URL || 'http://localhost:3000/api/v1/log',
-          NODE_ENV: env.NODE_ENV || 'debug',
-        }
-      });
-    });
-
-  }
-
-  /**
-   * Runs the webinterface with the set settings
-   */
-  async run() {
-    if (process.env.NODE_ENV === 'production') {
-      // Faster server renders w/ Prod mode (dev mode never needed)
-      enableProdMode();
+export class LXDHubWeb implements Interfaces.ILXDHubService {
+    private app;
+    private distFolder: string = join(process.cwd(), 'lib');
+    private browserDistFolder: string = join(this.distFolder, 'browser');
+    private logger: WinstonLogger;
+    constructor(private settings: LXDHubWebSettings) {
+        this.logger = new WinstonLogger('LXDHubWeb', settings.logLevel as LogType);
     }
-    try {
-      await this.bootstrap();
-    } catch (err) {
-      err = err as Error;
-      console.error(`An error occured while bootstraping the application`);
-      console.error(err.message);
+
+    private setupNgRendering() {
+        const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./lib/server/main');
+
+        const lxdHubWebSettingsProvider: StaticProvider = {
+            provide: LXDHUB_WEB_SETTINGS,
+            useValue: this.settings,
+        };
+
+        this.app.engine('html', ngExpressEngine({
+            bootstrap: AppServerModuleNgFactory,
+            providers: [
+                provideModuleMap(LAZY_MODULE_MAP),
+                lxdHubWebSettingsProvider
+            ]
+        }));
+
+        this.app.set('view engine', 'html');
+        this.app.set('views', this.browserDistFolder);
+
+        this.app.get('/api/*', (req, res) => {
+            res.status(404).send('data requests are not supported');
+        });
+
+        // Server static files from /browser
+        this.app.get('*.*', express.static(this.browserDistFolder));
+
+        // All regular routes use the Universal engine
+        this.app.get('*', (req, res) => {
+            res.render('index.html', { req });
+        });
     }
-    this.app.listen(this.settings.port, this.settings.hostUrl, () =>
-      console.log(`Open on http://${this.settings.hostUrl}:${this.settings.port}`));
-  }
+
+    private async bootstrap() {
+        this.app = express();
+        this.setupNgRendering();
+    }
+
+    private async listen() {
+        this.app.listen(this.settings.port, this.settings.hostUrl, () =>
+            this.logger.log(`Running webinterface on ` + Chalk.default.blue(`http://${this.settings.hostUrl}:${this.settings.port}`)));
+        try {
+            this.logger.log(`Set configuration: ${Chalk.default.blue(JSON.stringify(this.settings))}`);
+        } catch (ex) { }
+    }
+
+    /**
+     * Runs the webinterface with the set settings
+     */
+    async run() {
+        enableProdMode();
+        try {
+            await this.bootstrap();
+        } catch (err) {
+            err = err as Error;
+            this.logger.error(`An error occured while bootstraping the application`);
+            this.logger.error(err.message);
+        }
+        return await this.listen();
+    }
 }
 
-
-
+new LXDHubWeb({
+    hostUrl: process.env.HOST_URL || '0.0.0.0',
+    port: parseInt(process.env.PORT, 10) || 4200,
+    logLevel: process.env.LOG_LEVEL || 'silly',
+    loggingUrl: 'localhost:3000/api/v1/log',
+    apiUrl: process.env.API_URL || 'localhost:3000/api/v1'
+}).run();

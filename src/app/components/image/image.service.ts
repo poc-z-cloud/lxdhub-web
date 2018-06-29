@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { ImageListItemDto, PaginationResponseDto } from '@lxdhub/common';
 import { NGXLogger } from 'ngx-logger';
+import { LXDHubWebSettings, LXDHUB_WEB_SETTINGS } from '../../../lxdhubwebsettings.interface';
 
 /**
  * Interface to the LXDHub API for
@@ -16,8 +16,7 @@ export class ImageService {
   constructor(
     private http: HttpClient,
     private logger: NGXLogger,
-    @Inject('LXDHubWebSettings') private appSettings) {
-      console.log(this.appSettings);
+    @Inject(LXDHUB_WEB_SETTINGS) private settings: LXDHubWebSettings) {
     }
 
   /**
@@ -39,7 +38,7 @@ export class ImageService {
 
     // Fetch the Images
     return this.http
-      .get<PaginationResponseDto<ImageListItemDto>>(`${window['process.env'].API_URL}/image`, { params });
+      .get(`${this.settings.apiUrl}/image`, { params });
   }
 
   /**
@@ -49,7 +48,7 @@ export class ImageService {
   findOne(id: number) {
     this.logger.debug(`Find one image: imageId#${id}`);
     return this.http
-      .get(`${window['process.env'].API_URL}/image/${id}`);
+      .get(`${this.settings.apiUrl}/image/${id}`);
   }
 
   /**
@@ -60,6 +59,6 @@ export class ImageService {
   cloneImage(id: number, cloneImageDto) {
     this.logger.debug(`Cloning image: imageId#${id}`, cloneImageDto);
     return this.http
-      .post(`${window['process.env'].API_URL}/image/${id}/clone`, cloneImageDto);
+      .post(`${this.settings.apiUrl}/image/${id}/clone`, cloneImageDto);
   }
 }

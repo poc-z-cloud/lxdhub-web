@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Socket } from 'ng-socket-io';
+import { LXDHUB_WEB_SETTINGS } from '../../../lxdhubwebsettings.interface';
 
 @Injectable()
 export class ImageSocket extends Socket {
-    constructor() {
-        super({ url: `${window['process.env'].API_URL}/image`, options: {} });
+    constructor(@Inject(LXDHUB_WEB_SETTINGS) private settings) {
+        super({ url: `${settings.apiUrl}/image`, options: {} });
     }
 
     getCloneStatus(destinationRemoteId: number, operation: string, imageId: number): any {

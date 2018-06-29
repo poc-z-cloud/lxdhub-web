@@ -113,7 +113,6 @@ export class ImageListComponent {
    * options
    */
   loadPage() {
-    console.log(this.remote);
     return this.loadImages({
       limit: this.limit,
       offset: this.offset,

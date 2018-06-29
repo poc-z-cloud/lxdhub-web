@@ -1,3 +1,5 @@
+import { InjectionToken } from '@angular/core';
+
 /**
  * The settings for the web interface
  * of lxdhub
@@ -23,4 +25,7 @@ export interface LXDHubWebSettings {
      * be run at
      */
     hostUrl: string;
+    logLevel: string;
 }
+
+export const LXDHUB_WEB_SETTINGS = 'LxdhubWebSettings';

@@ -6,13 +6,12 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SocketIoModule } from 'ng-socket-io';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
+import { LXDHUB_WEB_SETTINGS, LXDHubWebSettings } from '../lxdhubwebsettings.interface';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ImageModule } from './components/image/image.module';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { LxdLogoComponent } from './components/shared/lxd-logo/lxd-logo.component';
-
-const env = window['process.env'];
 
 @NgModule({
   declarations: [
@@ -29,29 +28,19 @@ const env = window['process.env'];
     SocketIoModule,
     LoggerModule.forRoot({
       level: NgxLoggerLevel.DEBUG,
-      serverLogLevel: NgxLoggerLevel.DEBUG,
-      serverLoggingUrl: window['process.env'].LOGGING_URL
+      serverLogLevel: NgxLoggerLevel.DEBUG
     })
   ],
   providers: [
-    {
-      provide: 'LXDHubWebSettings',
-      useFactory: () => ({
-        apiUrl: env.API_URL,
-        loggingUrl: env.LOGGING_URL,
-        port: env.PORT,
-        hostUrl: env.HOST_URL
-      })
-    }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(APP_ID) private appId: string) {
-    const platform = isPlatformBrowser(platformId) ?
-      'in the browser' : 'on the server';
-    console.log(`Running ${platform} with appId=${appId}`);
+    @Inject(APP_ID) private appId: string,
+    @Inject(LXDHUB_WEB_SETTINGS) private settings: LXDHubWebSettings) {
+      const isBrowser = isPlatformBrowser(platformId);
+      console.log(this.settings, isBrowser);
   }
 }

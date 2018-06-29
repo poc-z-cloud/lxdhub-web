@@ -1,12 +1,11 @@
+import { Inject, NgModule } from '@angular/core';
 import { ServerModule } from '@angular/platform-server';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { ModuleMapLoaderModule } from '@nguniversal/module-map-ngfactory-loader';
 
+import { LXDHUB_WEB_SETTINGS } from '../lxdhubwebsettings.interface';
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
-import { AppSettingsModule } from './components/app-settings/app-settings.module';
-import { NgModule } from '@angular/core';
-
-const env = window['process.env'];
 
 @NgModule({
     imports: [
@@ -17,4 +16,7 @@ const env = window['process.env'];
     providers: [],
     bootstrap: [AppComponent],
 })
-export class AppServerModule {}
+export class AppServerModule {
+    constructor() {
+    }
+}

@@ -6,11 +6,10 @@ import { Observable } from 'rxjs/Observable';
 
 import { RemoteService } from '../remote.service';
 import { RemoteSelectComponent } from './remote-select.component';
-import { ResponseDto, RemoteDto } from '@lxdhub/common';
 
 class MockRemoteService {
-  findAll(): Observable<ResponseDto<RemoteDto[]>> {
-    const response: ResponseDto<RemoteDto[]> = {
+  findAll() {
+    const response = {
       results: [{
         name: '1',
         serverUrl: '1',

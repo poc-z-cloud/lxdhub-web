@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { LXDHubWebSettings, LXDHUB_WEB_SETTINGS } from '../../../lxdhubwebsettings.interface';
+import { isPlatformBrowser } from '@angular/common';
 
 /**
  * Interface to the LXDHub API for
@@ -14,7 +16,10 @@ export class RemoteService {
    */
   constructor(
     private http: HttpClient,
-    private logger: NGXLogger) { }
+    private logger: NGXLogger,
+    @Inject(LXDHUB_WEB_SETTINGS) private settings: LXDHubWebSettings,
+    @Inject(PLATFORM_ID) private platformId: Object) {
+     }
 
   /**
    * Fetches all remotes
@@ -23,6 +28,6 @@ export class RemoteService {
     this.logger.debug(`Request all remotes`);
     // Fetch the remotes
     return this.http
-      .get(`${window['process.env'].API_URL}/remote`);
+      .get(`${this.settings.apiUrl}/remote`);
   }
 }
