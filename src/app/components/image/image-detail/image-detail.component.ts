@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-import { ImageDetailDto } from '@lxdhub/common';
+import { Interfaces as API } from '@lxdhub/common';
 import * as PrettyBytes from 'pretty-bytes';
 import { Subscription } from 'rxjs';
 
@@ -116,7 +116,7 @@ import { ImageService } from '../image.service';
 })
 export class ImageDetailComponent implements OnInit, OnDestroy {
   idSubscriber: Subscription;
-  image: ImageDetailDto;
+  image: API.ImageDetailDto;
   loaded = false;
   error: string;
   localClone: any = {};
@@ -147,7 +147,7 @@ export class ImageDetailComponent implements OnInit, OnDestroy {
    * needs
    * @param image The image from the database
    */
-  mapImage(image: ImageDetailDto): ImageDetailDto {
+  mapImage(image: API.ImageDetailDto): API.ImageDetailDto {
     if (image.size) {
       image.size = PrettyBytes(image.size);
     }

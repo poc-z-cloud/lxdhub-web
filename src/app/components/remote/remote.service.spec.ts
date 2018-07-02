@@ -1,10 +1,10 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { RemoteDto, ResponseDto } from '@lxdhub/common';
+import { Interfaces } from '@lxdhub/common';
 
-import { environment } from '../../../environments/environment';
 import { RemoteService } from './remote.service';
 import { NGXLoggerMock, NGXLogger } from 'ngx-logger';
+import { SettingsMockProvider, SettingsMock } from '../../../settings.mock';
 
 describe('RemoteService', () => {
   let remoteService: RemoteService;
@@ -17,7 +17,8 @@ describe('RemoteService', () => {
         {
           provide: NGXLogger,
           useClass: NGXLoggerMock
-        }
+        },
+        SettingsMockProvider
       ]
     });
 
@@ -27,11 +28,11 @@ describe('RemoteService', () => {
   describe('findAll()', () => {
     it('should request to correct apiurl', () => {
       const data = remoteService.findAll()
-        .subscribe((response: ResponseDto<RemoteDto[]>) => {
+        .subscribe((response: Interfaces.ResponseDto<Interfaces.RemoteDto[]>) => {
           expect(response.results[0].name).toBe('1');
         });
 
-      const remoteRequest = httpMock.expectOne(`${environment.apiUrl}/api/v1/remote`);
+      const remoteRequest = httpMock.expectOne(`${SettingsMock.apiUrl}/api/v1/remote`);
       expect(remoteRequest.request.method).toBe('GET');
       remoteRequest.flush({ results: [{ name: '1' }] });
     });

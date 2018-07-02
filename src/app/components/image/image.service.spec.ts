@@ -1,9 +1,9 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { ImageDetailDto, ImageListItemDto, PaginationResponseDto, ResponseDto } from '@lxdhub/common';
-import { NGXLogger, NGXLoggerMock, LoggerModule } from 'ngx-logger';
+import { Interfaces as API } from '@lxdhub/common';
+import { LoggerModule, NGXLogger, NGXLoggerMock } from 'ngx-logger';
 
-import { environment } from '../../../environments/environment';
+import { SettingsMock, SettingsMockProvider } from '../../../settings.mock';
 import { ImageService } from './image.service';
 
 describe('ImageService', () => {
@@ -20,7 +20,8 @@ describe('ImageService', () => {
         {
           provide: NGXLogger,
           useClass: NGXLoggerMock
-        }
+        },
+        SettingsMockProvider
       ]
     });
 
@@ -30,23 +31,23 @@ describe('ImageService', () => {
   describe('findByRemote()', () => {
     it('should request to correct apiurl with query parameters', () => {
       const data = imageService.findByRemote({ remoteId: 1, limit: 25, offset: 0 })
-        .subscribe((response: PaginationResponseDto<ImageListItemDto[]>) => {
+        .subscribe((response: API.PaginationResponseDto<API.ImageListItemDto[]>) => {
           expect(response.results[0].fingerprint).toBe('1');
         });
 
-      const imageRequest = httpMock.expectOne(`${environment.apiUrl}/api/v1/image?limit=25&offset=0&remoteId=1`);
+      const imageRequest = httpMock.expectOne(`${SettingsMock.apiUrl}/api/v1/image?limit=25&offset=0&remoteId=1`);
       expect(imageRequest.request.method).toBe('GET');
       imageRequest.flush({ results: [{ fingerprint: '1' }] });
     });
 
     it('should request to correct apiurl with query parameters and a search string', () => {
       const data = imageService.findByRemote({ remoteId: 1, limit: 25, offset: 0, query: 'os=ubuntu' })
-        .subscribe((response: PaginationResponseDto<ImageListItemDto[]>) => {
+        .subscribe((response: API.PaginationResponseDto<API.ImageListItemDto[]>) => {
           expect(response.results[0].fingerprint).toBe('1');
         });
 
       const imageRequest = httpMock
-        .expectOne(`${environment.apiUrl}/api/v1/image?limit=25&offset=0&remoteId=1&query=os=ubuntu`);
+        .expectOne(`${SettingsMock.apiUrl}/api/v1/image?limit=25&offset=0&remoteId=1&query=os=ubuntu`);
       expect(imageRequest.request.method).toBe('GET');
       imageRequest.flush({ results: [{ fingerprint: '1' }] });
     });
@@ -59,11 +60,11 @@ describe('ImageService', () => {
   describe('findOne()', () => {
     it('should request to correct apiurl', () => {
       const data = imageService.findOne(1)
-        .subscribe((response: ResponseDto<ImageDetailDto>) => {
+        .subscribe((response: API.ResponseDto<API.ImageDetailDto>) => {
           expect(response.results.fingerprint).toBe('1');
         });
 
-      const imageRequest = httpMock.expectOne(`${environment.apiUrl}/api/v1/image/1`);
+      const imageRequest = httpMock.expectOne(`${SettingsMock.apiUrl}/api/v1/image/1`);
       expect(imageRequest.request.method).toBe('GET');
       imageRequest.flush({ results: { fingerprint: '1' } });
     });

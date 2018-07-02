@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatSelectChange, MatSnackBar } from '@angular/material';
-import { RemoteDto } from '@lxdhub/common';
+import { Interfaces } from '@lxdhub/common';
 
 import { RemoteService } from '../remote.service';
 
@@ -20,15 +20,15 @@ import { RemoteService } from '../remote.service';
  */
 export class RemoteSelectComponent implements OnInit {
 
-  remotes: RemoteDto[];
-  selectedRemote: RemoteDto;
+  remotes: Interfaces.RemoteDto[];
+  selectedRemote: Interfaces.RemoteDto;
   /**
    * The selected remote-event. Changes when the selected
    * remote changes.
    * @example
    * <app-remote-select (selected)="onRemoteChange($event)"></app-remote-select>
    */
-  @Output() selected = new EventEmitter<RemoteDto>();
+  @Output() selected = new EventEmitter<Interfaces.RemoteDto>();
 
   constructor(
     private remoteService: RemoteService,

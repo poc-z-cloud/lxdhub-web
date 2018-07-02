@@ -3,10 +3,23 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+import { APP_SETTINGS } from './settings';
 
-if (environment.production) {
-  enableProdMode();
-}
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+const start = async () => {
+  const response = await fetch('/config.json');
+  const settings = await response.json();
+
+  if (environment.production) {
+    enableProdMode();
+  }
+
+  await platformBrowserDynamic([{
+    useValue: settings,
+    provide: APP_SETTINGS
+  }])
+    .bootstrapModule<AppModule>(AppModule);
+
+};
+
+start();
