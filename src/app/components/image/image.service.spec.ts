@@ -35,7 +35,7 @@ describe('ImageService', () => {
           expect(response.results[0].fingerprint).toBe('1');
         });
 
-      const imageRequest = httpMock.expectOne(`${SettingsMock.apiUrl}/api/v1/image?limit=25&offset=0&remoteId=1`);
+      const imageRequest = httpMock.expectOne(`${SettingsMock.apiUrl}api/v1/image?limit=25&offset=0&remoteId=1`);
       expect(imageRequest.request.method).toBe('GET');
       imageRequest.flush({ results: [{ fingerprint: '1' }] });
     });
@@ -47,7 +47,7 @@ describe('ImageService', () => {
         });
 
       const imageRequest = httpMock
-        .expectOne(`${SettingsMock.apiUrl}/api/v1/image?limit=25&offset=0&remoteId=1&query=os=ubuntu`);
+        .expectOne(`${SettingsMock.apiUrl}api/v1/image?limit=25&offset=0&remoteId=1&query=os=ubuntu`);
       expect(imageRequest.request.method).toBe('GET');
       imageRequest.flush({ results: [{ fingerprint: '1' }] });
     });
@@ -64,7 +64,7 @@ describe('ImageService', () => {
           expect(response.results.fingerprint).toBe('1');
         });
 
-      const imageRequest = httpMock.expectOne(`${SettingsMock.apiUrl}/api/v1/image/1`);
+      const imageRequest = httpMock.expectOne(`${SettingsMock.apiUrl}api/v1/image/1`);
       expect(imageRequest.request.method).toBe('GET');
       imageRequest.flush({ results: { fingerprint: '1' } });
     });

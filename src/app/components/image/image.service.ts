@@ -41,7 +41,7 @@ export class ImageService {
 
     // Fetch the Images
     return this.http
-      .get<API.PaginationResponseDto<API.ImageListItemDto[]>>(`${this.config.apiUrl}/api/v1/image`, { params });
+      .get<API.PaginationResponseDto<API.ImageListItemDto[]>>(`${this.config.apiUrl}api/v1/image`, { params });
   }
 
   /**
@@ -52,7 +52,7 @@ export class ImageService {
     : Observable<API.ResponseDto<API.ImageDetailDto>> {
     this.logger.debug(`Find one image: imageId#${id}`);
     return this.http
-      .get<API.ResponseDto<API.ImageDetailDto>>(`${this.config.apiUrl}/api/v1/image/${id}`);
+      .get<API.ResponseDto<API.ImageDetailDto>>(`${this.config.apiUrl}api/v1/image/${id}`);
   }
 
   /**
@@ -64,6 +64,6 @@ export class ImageService {
     : Observable<API.ResponseDto<{ uuid: string }>> {
     this.logger.debug(`Cloning image: imageId#${id}`, cloneImageDto);
     return this.http
-      .post<API.ResponseDto<{ uuid: string }>>(`${this.config.apiUrl}/api/v1/image/${id}/clone`, cloneImageDto);
+      .post<API.ResponseDto<{ uuid: string }>>(`${this.config.apiUrl}api/v1/image/${id}/clone`, cloneImageDto);
   }
 }

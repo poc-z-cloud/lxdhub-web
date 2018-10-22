@@ -10,7 +10,7 @@ export interface AppSettings {
     apiUrl: string;
     /**
      * The logging url where the frontend should
-     * be logged at. Usually at <API_URL>/api/v1/log
+     * be logged at. Usually at <API_URL>api/v1/log
      */
     loggingUrl: string;
     /**
