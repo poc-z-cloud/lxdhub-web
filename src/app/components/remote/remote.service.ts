@@ -31,6 +31,6 @@ export class RemoteService {
     this.logger.debug(`Request all remotes`);
     // Fetch the remotes
     return this.http
-      .get<API.ResponseDto<API.RemoteDto[]>>(`${this.config.apiUrl}/api/v1/remote`);
+      .get<API.ResponseDto<API.RemoteDto[]>>(`${this.config.apiUrl}api/v1/remote`);
   }
 }

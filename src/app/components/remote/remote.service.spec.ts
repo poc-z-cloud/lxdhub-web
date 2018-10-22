@@ -32,7 +32,7 @@ describe('RemoteService', () => {
           expect(response.results[0].name).toBe('1');
         });
 
-      const remoteRequest = httpMock.expectOne(`${SettingsMock.apiUrl}/api/v1/remote`);
+      const remoteRequest = httpMock.expectOne(`${SettingsMock.apiUrl}api/v1/remote`);
       expect(remoteRequest.request.method).toBe('GET');
       remoteRequest.flush({ results: [{ name: '1' }] });
     });
