@@ -8,7 +8,7 @@
     "prepare": "yarn run build",
     "build": "yarn run build:server && yarn run build:browser",
     "build:server": "tsc -p server",
-    "build:browser": "ng build --preserve-symlinks --source-map=false",
+    "build:browser": "ng build --preserve-symlinks",
     "dev:browser": "ng build --watch",
     "test": "ng test --browsers ChromeHeadless --watch=false",
     "test:dev": "ng test --browsers Chrome",
@@ -86,5 +86,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Roche/lxdhub-web"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

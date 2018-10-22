@@ -45,7 +45,7 @@ Run the following command, to build the project.
 The build artifacts will be stored in the `dist/` directory.
 
 ```bash
-API_URL=<PROD_API_URL> LOGGING_URL=<PROD_API_URL>/api/v1/log npm run build
+API_URL=<PROD_API_URL> LOGGING_URL=<PROD_API_URL>api/v1/log npm run build
 ```
 
 # Docker
@@ -72,7 +72,7 @@ Edit the configuration by running in your shell `vi nginx-custom.conf`
 ```bash
 docker build -t lxdhub-web:prod --build-arg env=prod \
 --build-arg API_URL=http://prod.com:3000 \
---build-arg LOGGING_URL=http://prod.com:3000/api/v1/log .
+--build-arg LOGGING_URL=http://prod.com:3000api/v1/log .
 ```
 
 2. Run the image
