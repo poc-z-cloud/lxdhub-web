@@ -189,9 +189,9 @@
   dependencies:
     tslib "^1.9.0"
 
-"@lxdhub/common@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@lxdhub/common/-/common-1.7.0.tgz#fc742cae46e2faece441b18a2e3eb067825cafc4"
+"@lxdhub/common@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@lxdhub/common/-/common-1.7.1.tgz#07d915717ab7704c3b73a12860f06b7ef4bff059"
   dependencies:
     "@lxdhub/interfaces" "^1.7.0"
     "@types/node" "^10.3.4"

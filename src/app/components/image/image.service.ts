@@ -25,19 +25,19 @@ export class ImageService {
    * Fetches the images with the given pagination options applied
    * @param options The pagination options which will be sent as query parameter
    */
-  findByRemote(options: API.PaginationOptionsDto & { remoteId: number, query: string })
+  findByRemote(options: API.PaginationOptionsDto & { remote: string, query: string })
     : Observable<API.PaginationResponseDto<API.ImageListItemDto[]>> {
     // Set the query parameters
     let params = new HttpParams()
       .set('limit', options.limit.toString())
       .set('offset', options.offset.toString())
-      .set('remoteId', options.remoteId.toString());
+      .set('remote', options.remote.toString());
 
     if (options.query) {
       params = params.set('query', options.query.toString());
     }
 
-    this.logger.debug(`Find images by remote remoteId#${options.remoteId}`, options);
+    this.logger.debug(`Find images by remote ${options.remote}`, options);
 
     // Fetch the Images
     return this.http

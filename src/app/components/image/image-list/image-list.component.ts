@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { ImageListItemDto, ImageListOptions, PaginationResponseDto, RemoteDto } from '@lxdhub/common';
 
 import { ImageService } from '../image.service';
-import { NGXLogger } from 'ngx-logger';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-image-list',
@@ -62,10 +62,11 @@ export class ImageListComponent {
   /**
    * Initializes the ImageList Component
    * @param imageService The service to fetch images from the API interface
-   * @param loger The logger
    */
   constructor(
-    private imageService: ImageService) { }
+    private imageService: ImageService,
+    private route: ActivatedRoute) { }
+
   imageResponse: PaginationResponseDto<ImageListItemDto[]>;
   error: string;
   remote: RemoteDto;
@@ -114,11 +115,10 @@ export class ImageListComponent {
    * options
    */
   loadPage() {
-    console.log(this.remote);
     return this.loadImages({
       limit: this.limit,
       offset: this.offset,
-      remoteId: this.remote.id,
+      remote: this.remote.name,
       query: this.query
     });
   }

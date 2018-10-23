@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { ImageService } from '../image.service';
 import { ImageListComponent } from './image-list.component';
+import { ActivatedRoute } from '@angular/router';
 
 const images: ImageListItemDto[] = [{
   fingerprint: '1',
@@ -33,7 +34,7 @@ describe('ImageListComponent', () => {
 
   beforeEach(async(() => {
     imageService = new MockImageService();
-    component = new ImageListComponent(imageService as ImageService);
+    component = new ImageListComponent(imageService as ImageService, {} as ActivatedRoute);
     component.limit = 25;
     component.offset = 0;
     component.remote = { id: 1, name: '', protocol: '', public: true, readonly: false, serverUrl: '' };
