@@ -4,10 +4,10 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-lxd-logo',
   template: `
 <a routerLink="/">
-  <div class="logo row middle-xs">
-    <div class="logo-text row middle-xs">
-      <div class="accent-color">LXD</div>
-      <div class="light-color">Hub</div>
+  <div class="logo middle-xs">
+    <div class="logo-text middle-xs">
+      <span class="accent-color">LXD</span>
+      <span class="light-color">Hub</span>
     </div>
   </div>
 </a>
