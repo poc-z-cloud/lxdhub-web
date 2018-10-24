@@ -2,15 +2,15 @@ import 'rxjs/add/observable/of';
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSelectModule, MatSnackBarModule } from '@angular/material';
-import { RemoteDto, ResponseDto } from '@lxdhub/common';
+import { Interfaces as API } from '@lxdhub/common';
 import { Observable } from 'rxjs/Observable';
 
 import { RemoteService } from '../remote.service';
 import { RemoteSelectComponent } from './remote-select.component';
 
 class MockRemoteService {
-  findAll(): Observable<ResponseDto<RemoteDto[]>> {
-    const response: ResponseDto<RemoteDto[]> = {
+  findAll(): Observable<API.ResponseDto<API.RemoteDto[]>> {
+    const response: API.ResponseDto<API.RemoteDto[]> = {
       results: [{
         name: '1',
         serverUrl: '1',
@@ -53,11 +53,5 @@ describe('RemoteSelectComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should request remotes on init', () => {
-    const spy = spyOn(remoteService, 'findAll').and.callThrough();
-    component.loadRemotes();
-    expect(spy).toHaveBeenCalled();
   });
 });

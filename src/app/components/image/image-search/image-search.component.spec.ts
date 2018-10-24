@@ -6,26 +6,19 @@ import { ImageSearchComponent } from './image-search.component';
 
 describe('ImageSearchComponent', () => {
   let component: ImageSearchComponent;
-  let fixture: ComponentFixture<ImageSearchComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach((async () => {
+    const module = await TestBed.configureTestingModule({
       imports: [
         MatIconModule,
         FormsModule
       ],
-      declarations: [
+      providers: [
         ImageSearchComponent
       ]
-    })
-      .compileComponents();
+    });
+    component = module.get(ImageSearchComponent);
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ImageSearchComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
