@@ -30,24 +30,24 @@ describe('ImageService', () => {
   });
   describe('findByRemote()', () => {
     it('should request to correct apiurl with query parameters', () => {
-      const data = imageService.findByRemote({ remoteId: 1, limit: 25, offset: 0 })
+      const data = imageService.findByRemote({ remote: 'testremote', limit: 25, offset: 0, query: ''})
         .subscribe((response: API.PaginationResponseDto<API.ImageListItemDto[]>) => {
           expect(response.results[0].fingerprint).toBe('1');
         });
 
-      const imageRequest = httpMock.expectOne(`${SettingsMock.apiUrl}api/v1/image?limit=25&offset=0&remoteId=1`);
+      const imageRequest = httpMock.expectOne(`${SettingsMock.apiUrl}api/v1/image?limit=25&offset=0&remote=testremote`);
       expect(imageRequest.request.method).toBe('GET');
       imageRequest.flush({ results: [{ fingerprint: '1' }] });
     });
 
     it('should request to correct apiurl with query parameters and a search string', () => {
-      const data = imageService.findByRemote({ remoteId: 1, limit: 25, offset: 0, query: 'os=ubuntu' })
+      const data = imageService.findByRemote({ remote: 'testremote', limit: 25, offset: 0, query: 'os=ubuntu' })
         .subscribe((response: API.PaginationResponseDto<API.ImageListItemDto[]>) => {
           expect(response.results[0].fingerprint).toBe('1');
         });
 
       const imageRequest = httpMock
-        .expectOne(`${SettingsMock.apiUrl}api/v1/image?limit=25&offset=0&remoteId=1&query=os=ubuntu`);
+        .expectOne(`${SettingsMock.apiUrl}api/v1/image?limit=25&offset=0&remote=testremote&query=os=ubuntu`);
       expect(imageRequest.request.method).toBe('GET');
       imageRequest.flush({ results: [{ fingerprint: '1' }] });
     });

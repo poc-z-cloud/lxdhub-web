@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 
 const appRoutes: Routes = [
-  { path: '**', redirectTo: 'images' }
+  { path: '**', redirectTo: 'remote' }
 ];
 
 @NgModule({

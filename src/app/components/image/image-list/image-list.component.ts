@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
-import { PageEvent } from '@angular/material';
-import { ImageListItemDto, ImageListOptions, PaginationResponseDto, RemoteDto } from '@lxdhub/common';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { PageEvent, MatSnackBar } from '@angular/material';
+import * as API from '@lxdhub/interfaces';
 
 import { ImageService } from '../image.service';
-import { NGXLogger } from 'ngx-logger';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { RemoteService } from '../../remote/remote.service';
 
 @Component({
   selector: 'app-image-list',
@@ -24,13 +26,13 @@ import { NGXLogger } from 'ngx-logger';
   </div>
   <div class="row" [ngClass]="{ 'search-bar': !!imageResponse }">
     <div class="col-xs-12 col-md-2">
-      <app-remote-select (selected)="onRemoteChange($event)"></app-remote-select>
+      <app-remote-select (selectionChange)="onRemoteChange($event)" [remotes]="remotes" [selected]="selectedRemote"></app-remote-select>
     </div>
     <div class="col-xs-12 col-md-10">
       <app-image-search  *ngIf="imageResponse" [invalid]="invalidSearchQuery" (valueChange)="onQueryChange($event)"></app-image-search>
     </div>
   </div>
-  <app-remote-hint [remote]="remote"></app-remote-hint>
+  <app-remote-hint [remote]="selectedRemote"></app-remote-hint>
   <table class="image-list" *ngIf="imageResponse">
     <thead>
       <tr>
@@ -57,22 +59,81 @@ import { NGXLogger } from 'ngx-logger';
   `,
   styleUrls: ['./image-list.component.css']
 })
-export class ImageListComponent {
+export class ImageListComponent implements OnInit, OnDestroy {
 
   /**
    * Initializes the ImageList Component
    * @param imageService The service to fetch images from the API interface
-   * @param loger The logger
    */
   constructor(
-    private imageService: ImageService) { }
-  imageResponse: PaginationResponseDto<ImageListItemDto[]>;
+    private imageService: ImageService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private remoteService: RemoteService,
+    private snackbar: MatSnackBar) { }
+
+  remoteNameSubscriber: Subscription;
+  remotes: API.RemoteDto[];
+  imageResponse: API.PaginationResponseDto<API.ImageListItemDto[]>;
   error: string;
-  remote: RemoteDto;
   limit = 25;
   offset = 0;
   query = '';
+  selectedRemoteName: string;
+  selectedRemote: API.RemoteDto;
   invalidSearchQuery = false;
+
+  /**
+   * Subscribes to the id-Url-parameter and
+   * loads the image, if it changes
+   */
+  ngOnInit() {
+    this.loadRemotes();
+    this.remoteNameSubscriber = this.route.params
+      .subscribe(params => this.selectedRemoteName = params.remoteId);
+  }
+
+  /**
+   * Loads all remotes from the API, binds them
+   * to the controller and selected and emit
+   * the first remote.
+   */
+  loadRemotes() {
+    this.remoteService
+      .findAll()
+      .subscribe(
+        remoteResponse => {
+          this.remotes = remoteResponse.results;
+          this.updateSelectedRemote();
+        },
+        () => this.onRemotesError());
+  }
+
+
+  updateSelectedRemote() {
+    const selectedRemote = this.remotes.find(remote => remote.name === this.selectedRemoteName);
+    if (this.selectedRemoteName && !!selectedRemote) {
+      this.onRemoteChange(selectedRemote);
+    } else {
+      this.onRemoteChange(this.remotes[0]);
+    }
+  }
+  /**
+ * Gets called when there is an error
+ * while fetching the remotes.
+ */
+  onRemotesError() {
+    return this.snackbar
+      .open('Could not fetch remotes', 'Retry')
+      .onAction()
+      .subscribe(() => this.loadRemotes());
+  }
+  /**
+   * Unsubscribes to all obvervables
+   */
+  ngOnDestroy() {
+    this.remoteNameSubscriber.unsubscribe();
+  }
 
   /**
    * Gets called when a remote changes.
@@ -80,9 +141,10 @@ export class ImageListComponent {
    * `offset` to 0 and reloads loads the page
    * @param remote The remote, which got changed
    */
-  onRemoteChange(remote: RemoteDto) {
-    this.remote = remote;
+  onRemoteChange(remote: API.RemoteDto) {
+    this.selectedRemote = remote;
     this.offset = 0;
+    this.router.navigate([`/remote/${this.selectedRemote.name}/images`]);
     this.loadPage();
   }
   /**
@@ -114,11 +176,10 @@ export class ImageListComponent {
    * options
    */
   loadPage() {
-    console.log(this.remote);
     return this.loadImages({
       limit: this.limit,
       offset: this.offset,
-      remoteId: this.remote.id,
+      remote: this.selectedRemote.name,
       query: this.query
     });
   }
@@ -127,7 +188,7 @@ export class ImageListComponent {
    * Loads images with the given pagintaion options applied
    * @param pagination The pagination options which will be sent as query parameter to the server
    */
-  private loadImages(pagination: ImageListOptions) {
+  private loadImages(pagination: API.PaginationOptionsDto & { remote: string, query: string }) {
     return this.imageService.findByRemote(pagination)
       .subscribe(
         data => {

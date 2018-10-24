@@ -26,7 +26,8 @@ import { ImageSocket } from './image.socket';
  */
 const appRoutes: Routes = [
   // List of all images
-  { path: 'images', component: ImageListComponent },
+  { path: 'remote/:remoteId/images', component: ImageListComponent },
+  { path: 'remote', component: ImageListComponent },
   // Detail page of an image
   { path: 'image/:id', component: ImageDetailComponent }
 ];
