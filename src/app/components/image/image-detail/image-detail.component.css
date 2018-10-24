@@ -1,13 +1,12 @@
 .image-detail-header {
     background: #878787;
-    height: 200px;
+    height: 250px;
     padding: 0;
     display: flex;
     position: relative;
 }
 
 .image-detail-header-content {
-    padding: 0;
     flex: 1;
 }
 

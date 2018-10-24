@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-navigation',
   template: `
-<nav class="app-navigation background-primary-color row middle-xs">
+<nav class="app-navigation background-primary-color row middle-xs layout-padding">
   <div class="app-navigation-container row
   col-lg-8
   col-lg-offset-2
@@ -12,7 +12,8 @@ import { Component, OnInit } from '@angular/core';
   col-sm-10
   col-sm-offset-1
   col-xs-12
-  col-xs-offset-0">
+  col-xs-offset-0
+  layout-padding">
     <app-lxd-logo></app-lxd-logo>
     <!-- Spacer -->
     <div class="col-xs"></div>

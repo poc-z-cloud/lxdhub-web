@@ -5,11 +5,6 @@
     margin-left: 0;
 }
 
-@media only screen and (min-width: 48em) {
-    .app-navigation-container {
-        padding-left: 0;
-    }
-}
 
 .nav-items {
     margin-right: 0;

@@ -18,8 +18,17 @@ import { ImageService } from '../image.service';
     </span>
   </div>
   <header class="image-detail-header col-xs-12 column middle-xs" *ngIf="!error">
-    <div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0 row image-detail-header-content">
-      <div class="column col-xs">
+    <div class="image-detail-header-content
+      row
+      col-lg-8
+      col-lg-offset-2
+      col-md-10
+      col-md-offset-1
+      col-sm-10
+      col-sm-offset-1
+      col-xs-12
+      col-xs-offset-0">
+      <div class="column col-xs layout-padding">
         <div class="image-description light-color" *ngIf="image.operatingSystem">
           {{ image.operatingSystem.distribution }}
           {{ image.operatingSystem.release }}
@@ -36,8 +45,16 @@ import { ImageService } from '../image.service';
               color="accent"
               class="clone-image">Clone Image</button>
     </div>
-    <section class="remote-list">
-      <section class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0 row">
+    <section class="remote-list layout-padding">
+      <section class="row
+      col-lg-8
+      col-lg-offset-2
+      col-md-10
+      col-md-offset-1
+      col-sm-10
+      col-sm-offset-1
+      col-xs-12
+      col-xs-offset-0">
         <mat-chip-list>
           <mat-chip
             *ngFor="let remote of image.remotes"
@@ -52,16 +69,15 @@ import { ImageService } from '../image.service';
       </section>
     </section>
   </header>
-  <div class="image-detail-content layout-padding
-    col-lg-6
-    col-lg-offest-3
-    col-md-offest
-    col-md-8
-    col-md-offset-2
-    col-sm-10
-    col-sm-1
-    col-xs-12
-    col-xs-offset-0"
+  <div class="image-detail-content
+  col-lg-8
+  col-lg-offset-2
+  col-md-10
+  col-md-offset-1
+  col-sm-10
+  col-sm-offset-1
+  col-xs-12
+  col-xs-offset-0 column"
     *ngIf="!error">
     <h2 class="detail-overtitle">Detail</h2>
     <div>
