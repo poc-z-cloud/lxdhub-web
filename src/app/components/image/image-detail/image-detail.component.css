@@ -1,11 +1,13 @@
 .image-detail-header {
     background: #878787;
-    height: 200px;
+    height: 250px;
     padding: 0;
+    display: flex;
+    position: relative;
 }
 
 .image-detail-header-content {
-    padding: 0;
+    flex: 1;
 }
 
 .image-description {
@@ -47,4 +49,20 @@
 .remote-icon {
     position: relative;
     top: 5px;
+}
+
+.remote-list {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+.mat-chip-disabled {
+    background-color: rgba(0,0,0,.12);
+    color: rgba(0,0,0,.26);
+}
+
+.mat-chip {
+    cursor: pointer;
+    border-radius: 0px;
 }

@@ -4,10 +4,26 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { APP_SETTINGS } from './settings';
 
+const DEFAULT_SETTINGS = {
+  'hostUrl': '0.0.0.0',
+  'port': 4200,
+  'logLevel': 'silly',
+  'loggingUrl': 'http://0.0.0.0:3000/api/v1/log',
+  'apiUrl': 'http://0.0.0.0:3000/'
+};
 
 const start = async () => {
-  const response = await fetch('/config.json');
-  const settings = await response.json();
+  let settings;
+  try {
+    const response = await fetch('/config.json');
+    settings = await response.json();
+  } catch (err) {
+    console.warn('Could not fetch config.json. Taking default config');
+  }
+  finally {
+    settings = settings || DEFAULT_SETTINGS;
+  }
+
 
   // TODO: switch in dev mode
   enableProdMode();

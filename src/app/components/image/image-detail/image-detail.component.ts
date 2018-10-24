@@ -17,9 +17,18 @@ import { ImageService } from '../image.service';
     {{ error }}
     </span>
   </div>
-  <header class="image-detail-header col-xs-12 row middle-xs" *ngIf="!error">
-    <div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0 row image-detail-header-content">
-      <div class="column col-xs">
+  <header class="image-detail-header col-xs-12 column middle-xs" *ngIf="!error">
+    <div class="image-detail-header-content
+      row
+      col-lg-8
+      col-lg-offset-2
+      col-md-10
+      col-md-offset-1
+      col-sm-10
+      col-sm-offset-1
+      col-xs-12
+      col-xs-offset-0">
+      <div class="column col-xs layout-padding">
         <div class="image-description light-color" *ngIf="image.operatingSystem">
           {{ image.operatingSystem.distribution }}
           {{ image.operatingSystem.release }}
@@ -36,17 +45,39 @@ import { ImageService } from '../image.service';
               color="accent"
               class="clone-image">Clone Image</button>
     </div>
+    <section class="remote-list layout-padding">
+      <section class="row
+      col-lg-8
+      col-lg-offset-2
+      col-md-10
+      col-md-offset-1
+      col-sm-10
+      col-sm-offset-1
+      col-xs-12
+      col-xs-offset-0">
+        <mat-chip-list>
+          <mat-chip
+            *ngFor="let remote of image.remotes"
+            color="accent"
+            matTooltipPosition="above"
+            [matTooltip]="getRemoteTooltip(remote)"
+            [disabled]="!remote.available"
+            [routerLink]="['/remote/' + remote.name + '/images']">
+            {{remote.name}}
+          </mat-chip>
+        </mat-chip-list>
+      </section>
+    </section>
   </header>
-  <div class="image-detail-content layout-padding
-    col-lg-6
-    col-lg-offest-3
-    col-md-offest
-    col-md-8
-    col-md-offset-2
-    col-sm-10
-    col-sm-1
-    col-xs-12
-    col-xs-offset-0"
+  <div class="image-detail-content
+  col-lg-8
+  col-lg-offset-2
+  col-md-10
+  col-md-offset-1
+  col-sm-10
+  col-sm-offset-1
+  col-xs-12
+  col-xs-offset-0 column"
     *ngIf="!error">
     <h2 class="detail-overtitle">Detail</h2>
     <div>
@@ -89,16 +120,6 @@ import { ImageService } from '../image.service';
     </div>
     <div>
       <span class="detail-title">Auto Update</span> {{ image.autoUpdate }}
-    </div>
-    <div *ngIf="image.remotes.length">
-      <span class="detail-title">Remotes</span>
-      <ul>
-        <li *ngFor="let remote of image.remotes">
-          <strong>{{remote.name}}:</strong>
-          <mat-icon *ngIf="!remote.available" class="remote-icon">close</mat-icon>
-          <mat-icon *ngIf="remote.available" class="remote-icon">check</mat-icon>
-        </li>
-      </ul>
     </div>
     <div *ngIf="image.aliases.length">
       <span class="detail-title">Aliases</span>
@@ -152,6 +173,11 @@ export class ImageDetailComponent implements OnInit, OnDestroy {
       image.size = PrettyBytes(image.size);
     }
     return image;
+  }
+
+  getRemoteTooltip(remote: { name: string, available: boolean }) {
+    const status = remote.available ? 'present' : 'not present';
+    return `Image is ${status} on the "${remote.name}" remote`;
   }
 
   /**
