@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - run: docker build -t brunnel6/lxdhub-web .
-      - run: docker run -it brunnel6/lxdhub-web test
+      # - run: docker run -it brunnel6/lxdhub-web test
 
   deploy_docker:
     machine: true
