@@ -7,7 +7,9 @@ import {
   MatListModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
-  MatSelectModule
+  MatSelectModule,
+  MatChipsModule,
+  MatTooltipModule
 } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule, Routes } from '@angular/router';
@@ -46,6 +48,8 @@ const appRoutes: Routes = [
     FormsModule,
     MatDialogModule,
     MatListModule,
+    MatChipsModule,
+    MatTooltipModule,
     MatSelectModule,
     MatProgressSpinnerModule
   ],
