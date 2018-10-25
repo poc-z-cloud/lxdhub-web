@@ -22,6 +22,9 @@ const start = async () => {
   }
   finally {
     settings = settings || DEFAULT_SETTINGS;
+    if (settings.GANALYTICS) {
+      (window as any).gtag('config', settings.googleAnalytics);
+    }
   }
 
 

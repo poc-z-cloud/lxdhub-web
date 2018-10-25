@@ -6,5 +6,6 @@ new LXDHubWeb({
     port: parseInt(process.env.PORT, 10) || 4200,
     logLevel: process.env.LOG_LEVEL || 'silly',
     loggingUrl: 'http://0.0.0.0:3000/api/v1/log',
-    apiUrl: process.env.API_URL || 'http://0.0.0.0:3000/'
+    apiUrl: process.env.API_URL || 'http://0.0.0.0:3000/',
+    googleAnalytics: process.env.GOOGLE_ANALYTICS,
 }).run();

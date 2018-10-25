@@ -15,4 +15,8 @@ export interface LXDHubWebSettings extends AppSettings {
      * be run at
      */
     hostUrl: string;
+    /**
+     * The google analytics key e.g. UA-XXXXXXXXX-X
+     */
+    googleAnalytics?: string;
 }
