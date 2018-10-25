@@ -1,12 +1,12 @@
 {
   "name": "@lxdhub/web",
-  "version": "1.7.7",
+  "version": "1.7.8",
   "main": "lib/server/",
   "scripts": {
     "ng": "ng",
     "dev": "ng serve",
     "start": "node ./bin/start-web.js",
-    "prepare": "yarn run build",
+    "prepare": "yarn run build:prod",
     "build": "yarn run build:server && yarn run build:browser",
     "build:prod": "yarn run build:server && yarn run build:browser -- --prod",
     "build:server": "tsc -p server",
