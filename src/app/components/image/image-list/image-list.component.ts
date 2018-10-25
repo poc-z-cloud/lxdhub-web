@@ -107,7 +107,6 @@ export class ImageListComponent implements OnInit, OnDestroy {
         .findAll()
         .toPromise();
       this.remotes = remoteResponse.results;
-      this.updateSelectedRemote();
       return remoteResponse;
     } catch (err) {
       this.onRemotesError();
