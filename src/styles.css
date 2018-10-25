@@ -32,6 +32,10 @@
   color: #FFF;
 }
 
+.mat-paginator {
+  background: transparent;
+}
+
 .white-text {
   color: #FFF!important;
 }
