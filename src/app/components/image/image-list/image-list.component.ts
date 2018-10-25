@@ -87,10 +87,13 @@ export class ImageListComponent implements OnInit, OnDestroy {
    * Subscribes to the id-Url-parameter and
    * loads the image, if it changes
    */
-  ngOnInit() {
-    this.loadRemotes();
+  async ngOnInit() {
+    await this.loadRemotes();
     this.remoteNameSubscriber = this.route.params
-      .subscribe(params => this.selectedRemoteName = params.remoteId);
+      .subscribe(params => {
+        this.selectedRemoteName = params.remoteId;
+        this.updateSelectedRemote();
+      });
   }
 
   /**
@@ -98,24 +101,26 @@ export class ImageListComponent implements OnInit, OnDestroy {
    * to the controller and selected and emit
    * the first remote.
    */
-  loadRemotes() {
-    this.remoteService
-      .findAll()
-      .subscribe(
-        remoteResponse => {
-          this.remotes = remoteResponse.results;
-          this.updateSelectedRemote();
-        },
-        () => this.onRemotesError());
+  async loadRemotes(): Promise<API.ResponseDto<API.RemoteDto[]>> {
+    try {
+      const remoteResponse = await this.remoteService
+        .findAll()
+        .toPromise();
+      this.remotes = remoteResponse.results;
+      this.updateSelectedRemote();
+      return remoteResponse;
+    } catch (err) {
+      this.onRemotesError();
+    }
   }
 
 
   updateSelectedRemote() {
     const selectedRemote = this.remotes.find(remote => remote.name === this.selectedRemoteName);
     if (this.selectedRemoteName && !!selectedRemote) {
-      this.onRemoteChange(selectedRemote);
+      this.onRemoteChange(selectedRemote, false);
     } else {
-      this.onRemoteChange(this.remotes[0]);
+      this.onRemoteChange(this.remotes[0], true);
     }
   }
   /**
@@ -141,10 +146,11 @@ export class ImageListComponent implements OnInit, OnDestroy {
    * `offset` to 0 and reloads loads the page
    * @param remote The remote, which got changed
    */
-  onRemoteChange(remote: API.RemoteDto) {
+  onRemoteChange(remote: API.RemoteDto, replaceUrl?: boolean) {
     this.selectedRemote = remote;
     this.offset = 0;
-    this.router.navigate([`/remote/${this.selectedRemote.name}/images`]);
+    const url = `/remote/${this.selectedRemote.name}/images`;
+    this.router.navigate([url], { replaceUrl });
     this.loadPage();
   }
   /**
