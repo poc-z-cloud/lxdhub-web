@@ -114,9 +114,9 @@ describe('ImageListComponent', () => {
 
   describe('ngOnInit', () => {
 
-    it('should load all remotes on init', () => {
+    it('should load all remotes on init', async () => {
       spyOn(remoteService, 'findAll').and.callThrough();
-      component.ngOnInit();
+      await component.ngOnInit();
 
       expect(component.selectedRemoteName).toBe('test');
       expect(component.selectedRemote.id).toBe(1);
@@ -124,9 +124,9 @@ describe('ImageListComponent', () => {
       expect(remoteService.findAll).toHaveBeenCalledTimes(1);
     });
 
-    it('should request the images on init', () => {
+    it('should request the images on init', async () => {
       spyOn(imageService, 'findByRemote').and.callThrough();
-      component.ngOnInit();
+      await component.ngOnInit();
 
       expect(imageService.findByRemote).toHaveBeenCalledWith({ limit, query, offset, remote: 'test' });
     });
@@ -140,7 +140,7 @@ describe('ImageListComponent', () => {
       component.onRemoteChange({ name: 'test' } as API.RemoteDto);
       expect(component.selectedRemote.name).toBe('test');
       expect(component.offset).toBe(0);
-      expect(router.navigate).toHaveBeenCalledWith(['/remote/test/images']);
+      expect(router.navigate).toHaveBeenCalledWith(['/remote/test/images'], { replaceUrl: undefined });
       expect(imageService.findByRemote).toHaveBeenCalledTimes(1);
     });
   });
