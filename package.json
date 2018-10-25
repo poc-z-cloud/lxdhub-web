@@ -8,6 +8,7 @@
     "start": "node ./bin/start-web.js",
     "prepare": "yarn run build",
     "build": "yarn run build:server && yarn run build:browser",
+    "build:prod": "yarn run build:server && yarn run build:browser -- --prod",
     "build:server": "tsc -p server",
     "build:browser": "ng build --preserve-symlinks",
     "dev:browser": "ng build --watch",
