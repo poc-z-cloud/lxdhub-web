@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-navigation',
   template: `
-<nav class="app-navigation background-primary-color row middle-xs layout-padding">
+<nav class="app-navigation background-primary-color middle-xs layout-padding">
   <div class="app-navigation-container row
   col-lg-8
   col-lg-offset-2

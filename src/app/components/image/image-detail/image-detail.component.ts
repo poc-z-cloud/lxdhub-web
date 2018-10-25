@@ -29,13 +29,8 @@ import { ImageService } from '../image.service';
       col-xs-12
       col-xs-offset-0">
       <div class="column col-xs layout-padding">
-        <div class="image-description light-color" *ngIf="image.operatingSystem">
-          {{ image.operatingSystem.distribution }}
-          {{ image.operatingSystem.release }}
-          {{ image.operatingSystem.version }}
-        </div>
-        <div class="image-description-detail light-color" *ngIf="image.architecture">
-          {{ image.architecture.humanName }}
+        <div class="image-description light-color">
+          {{ getCleanDescription(image.description) }}
         </div>
       </div>
       <button [disabled]="!image.cloneable"
@@ -45,7 +40,7 @@ import { ImageService } from '../image.service';
               color="accent"
               class="clone-image">Clone Image</button>
     </div>
-    <section class="remote-list layout-padding">
+    <section class="remote-list margin-padding">
       <section class="row
       col-lg-8
       col-lg-offset-2
@@ -173,6 +168,14 @@ export class ImageDetailComponent implements OnInit, OnDestroy {
       image.size = PrettyBytes(image.size);
     }
     return image;
+  }
+
+  /**
+   * Returns a cleaner description of the image
+   * @param description The raw description of the image
+   */
+  getCleanDescription(description: string) {
+    return description.split('(')[0].trim();
   }
 
   getRemoteTooltip(remote: { name: string, available: boolean }) {

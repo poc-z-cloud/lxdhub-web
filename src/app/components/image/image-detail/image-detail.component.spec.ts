@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule, MatDialogModule, MatIconModule } from '@angular/material';
+import { TestBed } from '@angular/core/testing';
+import { MatButtonModule, MatDialogModule, MatIconModule, MatChipsModule, MatTooltipModule } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs/Observable';
 
-import { ImageCloneHintComponent } from '../image-clone-hint/image-clone-hint.component';
 import { ImageService } from '../image.service';
 import { ImageDetailComponent } from './image-detail.component';
 
@@ -13,59 +13,52 @@ class ImageServiceMock {
   }
 }
 
+const ActivatedRouteMock = {
+  params: {
+    subscribe: (fn: (value: Params) => void) => fn({
+      id: 1,
+    }),
+  },
+};
+
 describe('ImageDetailComponent', () => {
   let component: ImageDetailComponent;
-  let fixture: ComponentFixture<ImageDetailComponent>;
   let imageService: ImageService;
 
   beforeEach((async () => {
-    TestBed.configureTestingModule({
-      declarations: [
-        ImageDetailComponent,
-        ImageCloneHintComponent
-      ],
+    const module = await TestBed.configureTestingModule({
       providers: [
-        {
-          provide: ImageService,
-          useClass: ImageServiceMock
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: {
-              subscribe: (fn: (value: Params) => void) => fn({
-                id: 1,
-              }),
-            },
-          }
-        }
+        ImageDetailComponent,
+        { provide: ImageService, useClass: ImageServiceMock },
+        { provide: ActivatedRoute, useValue: ActivatedRouteMock }
       ],
       imports: [
         MatDialogModule,
         MatIconModule,
-        MatButtonModule
+        MatButtonModule,
+        MatChipsModule,
+        MatTooltipModule,
+        RouterTestingModule.withRoutes([]),
       ]
-    }).compileComponents();
+    });
+
+    component = module.get(ImageDetailComponent);
     imageService = TestBed.get(ImageService);
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ImageDetailComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  describe('getCleanDescription', () => {
+    it('should remove the brackets', () => {
+      const values = [
+        ['amd64 (test)', 'amd64'],
+        ['amd64', 'amd64'],
+        ['ubuntu bionic 18.04 (release) (20180617)', 'ubuntu bionic 18.04']
+      ];
 
-  // describe('loadImage', () => {
-  // it('should load the image with the given id', () => {
-  //   spyOn(imageService, 'findOne').and.callFake(() => Observable.of({ results: { id: 1, size: 123, remotes: [{ available: true }] } }));
-  //   component.loadImage(1);
-
-  //   expect(imageService.findOne).toHaveBeenCalledWith(1);
-  // });
-
-  // });
+      values.forEach(value => expect(component.getCleanDescription(value[0])).toBe(value[1]));
+    });
+  });
 });
