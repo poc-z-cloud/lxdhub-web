@@ -33,6 +33,7 @@ import { RemoteService } from '../../remote/remote.service';
     </div>
   </div>
   <app-remote-hint [remote]="selectedRemote"></app-remote-hint>
+
   <table class="image-list" *ngIf="imageResponse">
     <thead>
       <tr>
@@ -42,9 +43,11 @@ import { RemoteService } from '../../remote/remote.service';
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let image of imageResponse.results" [routerLink]="['/image', image.id]">
+      <tr class="image-list-item"
+          *ngFor="let image of imageResponse.results"
+          [routerLink]="['/remote/' + selectedRemote.name + '/image/' + image.fingerprint]">
         <td class="image-column">{{ image.description }}</td>
-        <td>{{ image.fingerprint | slice:0:12 }}</td>
+        <td>{{ image.fingerprint }}</td>
         <td>{{ image.uploadedAt }}</td>
       </tr>
     </tbody>

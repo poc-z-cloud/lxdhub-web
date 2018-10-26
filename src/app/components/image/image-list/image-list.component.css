@@ -33,3 +33,7 @@
     min-height: 60px;
     margin: 0;
 }
+
+.image-list-item {
+    cursor: pointer;
+}

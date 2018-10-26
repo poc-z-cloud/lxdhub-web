@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Interfaces as API } from '@lxdhub/common';
-import * as PrettyBytes from 'pretty-bytes';
 import { Subscription } from 'rxjs';
 
 import { ImageCloneDialogComponent } from '../image-clone-dialog/image-clone-dialog.component';
@@ -108,7 +107,7 @@ import { ImageService } from '../image.service';
       <span class="detail-title">Serial</span> {{ image.serial }}
     </div>
     <div *ngIf="image.size">
-      <span class="detail-title">Imagesize</span> {{ image.size }}
+      <span class="detail-title">Imagesize</span> {{ image.size.humanReadable }}
     </div>
     <div>
       <span class="detail-title">Public</span> {{ image.public }}
@@ -131,7 +130,9 @@ import { ImageService } from '../image.service';
   styleUrls: ['./image-detail.component.css']
 })
 export class ImageDetailComponent implements OnInit, OnDestroy {
-  idSubscriber: Subscription;
+  remoteIdSubscriber: Subscription;
+  imageIdSubscriber: Subscription;
+  remoteId: number;
   image: API.ImageDetailDto;
   loaded = false;
   error: string;
@@ -153,21 +154,11 @@ export class ImageDetailComponent implements OnInit, OnDestroy {
    * loads the image, if it changes
    */
   ngOnInit() {
-    this.idSubscriber = this.route.params
-      .subscribe(params =>
-        this.loadImage(params.id));
-  }
+    this.remoteIdSubscriber = this.route.params
+      .subscribe(params => this.remoteId = params.remoteId);
 
-  /**
-   * Maps data from the database with data the UI
-   * needs
-   * @param image The image from the database
-   */
-  mapImage(image: API.ImageDetailDto): API.ImageDetailDto {
-    if (image.size) {
-      image.size = PrettyBytes(image.size);
-    }
-    return image;
+    this.imageIdSubscriber = this.route.params
+      .subscribe(params => this.loadImage(params.imageId));
   }
 
   /**
@@ -193,7 +184,7 @@ export class ImageDetailComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           // Map image and bind it to the controller
-          this.image = this.mapImage(response.results);
+          this.image = response.results;
           this.loaded = true;
           this.localClone.sourceRemote = this.image.remotes.filter(remote => remote.available)[0];
           this.localClone.destinationRemote = { name: 'local' };
@@ -210,7 +201,8 @@ export class ImageDetailComponent implements OnInit, OnDestroy {
    * Unsubscribe from everything
    */
   ngOnDestroy() {
-    this.idSubscriber.unsubscribe();
+    this.imageIdSubscriber.unsubscribe();
+    this.remoteIdSubscriber.unsubscribe();
   }
 
   /**

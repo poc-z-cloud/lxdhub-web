@@ -38,7 +38,6 @@
     "ng-socket-io": "^0.2.4",
     "ngx-logger": "^3.0.5",
     "normalize.css": "^8.0.0",
-    "pretty-bytes": "^4.0.2",
     "rxjs": "^6.2.1",
     "rxjs-compat": "^6.2.1",
     "tslib": "^1.9.3",

@@ -31,7 +31,7 @@ const appRoutes: Routes = [
   { path: 'remote/:remoteId/images', component: ImageListComponent },
   { path: 'remote', component: ImageListComponent },
   // Detail page of an image
-  { path: 'image/:id', component: ImageDetailComponent }
+  { path: 'remote/:remoteId/image/:imageId', component: ImageDetailComponent }
 ];
 
 /**
