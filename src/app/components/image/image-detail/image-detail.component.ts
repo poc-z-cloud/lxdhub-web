@@ -113,7 +113,7 @@ import { ImageService } from '../image.service';
     <div>
       <span class="detail-title">Public</span> {{ image.public }}
     </div>
-    <div>
+    <div *ngIf="image.autoUpdate">
       <span class="detail-title">Auto Update</span> {{ image.autoUpdate }}
     </div>
     <div *ngIf="image.aliases.length">
