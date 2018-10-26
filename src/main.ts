@@ -22,11 +22,11 @@ const start = async () => {
   }
   finally {
     settings = settings || DEFAULT_SETTINGS;
-    if (settings.GANALYTICS) {
-      (window as any).gtag('config', settings.googleAnalytics);
-    }
   }
 
+  if (settings.googleAnalytics) {
+    (window as any).gtag('config', settings.googleAnalytics);
+  }
 
   // TODO: switch in dev mode
   enableProdMode();
