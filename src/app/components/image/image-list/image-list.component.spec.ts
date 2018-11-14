@@ -1,9 +1,6 @@
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/throw';
-
 import { async, TestBed } from '@angular/core/testing';
 import { Interfaces as API } from '@lxdhub/common';
-import { Observable } from 'rxjs/Observable';
+import { of, Observable } from 'rxjs';
 
 import { ImageService } from '../image.service';
 import { ImageListComponent } from './image-list.component';
@@ -27,7 +24,7 @@ class MockImageService {
       limit: options.limit,
       total: 1
     };
-    return Observable.of(imageResponse);
+    return of(imageResponse);
   }
 }
 
@@ -44,7 +41,7 @@ class MockRemoteService {
         id: 1
       }]
     };
-    return Observable.of(response);
+    return of(response);
   }
 }
 
