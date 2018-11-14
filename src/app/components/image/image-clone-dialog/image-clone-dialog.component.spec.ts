@@ -1,5 +1,3 @@
-import 'rxjs/add/observable/from';
-
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
@@ -15,7 +13,7 @@ import {
 } from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Observable } from 'rxjs/Observable';
+import { from } from 'rxjs';
 
 import { ImageCloneHintComponent } from '../image-clone-hint/image-clone-hint.component';
 import { ImageService } from '../image.service';
@@ -114,7 +112,7 @@ describe('ImageCloneDialogComponent', () => {
   });
 
   it('should correctly call imageservice onSubmit', () => {
-    spyOn(imageService, 'cloneImage').and.callFake(() => Observable.from([{ results: { uuid: '1' } }]));
+    spyOn(imageService, 'cloneImage').and.callFake(() => from([{ results: { uuid: '1' } }]));
     spyOn(component, 'waitForCloneOperation').and.callFake(() => { });
     component.selectedDestination = { id: 1 };
     component.selectedSource = { id: 2 };
@@ -126,7 +124,7 @@ describe('ImageCloneDialogComponent', () => {
   });
 
   it('should correctly call imageservice waitForCloneOperation', () => {
-    spyOn(imageSocket, 'getCloneStatus').and.callFake(() => Observable.from([{ results: { uuid: '1' } }]));
+    spyOn(imageSocket, 'getCloneStatus').and.callFake(() => from([{ results: { uuid: '1' } }]));
     spyOn(component, 'closeDialog').and.callFake(() => { });
     component.selectedDestination = { id: 1 };
     component.image = { id: 1 };
